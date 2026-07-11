@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2>Driver Management</h2>
+
+</div>
+
+<div class="card shadow mb-4">
+
+    <div class="card-header bg-success text-white">
+
+        Register Driver
+
+    </div>
+
+    <div class="card-body">
+
+        <form action="/add_driver" method="POST">
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+                    <label>Driver Name</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>License Number</label>
+                    <input type="text" name="license_number" class="form-control" required>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>License Category</label>
+                    <input type="text" name="license_category" class="form-control" required>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-3 mb-3">
+                    <label>License Expiry</label>
+                    <input type="date" name="license_expiry" class="form-control" required>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label>Contact Number</label>
+                    <input type="text" name="contact" class="form-control">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label>Safety Score</label>
+                    <input type="number" name="safety_score" class="form-control" value="100">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label>Status</label>
+
+                    <select name="status" class="form-select">
+
+                        <option>Available</option>
+                        <option>On Trip</option>
+                        <option>Off Duty</option>
+                        <option>Suspended</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <button class="btn btn-success">
+
+                Register Driver
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-header bg-dark text-white">
+
+        Driver List
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-light">
+
+            <tr>
+
+                <th>ID</th>
+                <th>Name</th>
+                <th>License</th>
+                <th>Category</th>
+                <th>Expiry</th>
+                <th>Contact</th>
+                <th>Safety</th>
+                <th>Status</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for driver in drivers %}
+
+            <tr>
+
+                <td>{{ driver.id }}</td>
+
+                <td>{{ driver.name }}</td>
+
+                <td>{{ driver.license_number }}</td>
+
+                <td>{{ driver.license_category }}</td>
+
+                <td>{{ driver.license_expiry }}</td>
+
+                <td>{{ driver.contact }}</td>
+
+                <td>{{ driver.safety_score }}</td>
+
+                <td>
+
+                    {% if driver.status=="Available" %}
+
+                        <span class="badge bg-success">
+
+                            {{ driver.status }}
+
+                        </span>
+
+                    {% elif driver.status=="On Trip" %}
+
+                        <span class="badge bg-warning">
+
+                            {{ driver.status }}
+
+                        </span>
+
+                    {% elif driver.status=="Suspended" %}
+
+                        <span class="badge bg-danger">
+
+                            {{ driver.status }}
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-secondary">
+
+                            {{ driver.status }}
+
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

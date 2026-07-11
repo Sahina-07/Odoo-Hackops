@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Fuel Management</h2>
+
+<div class="card shadow mb-4">
+
+    <div class="card-header bg-success text-white">
+
+        Add Fuel Log
+
+    </div>
+
+    <div class="card-body">
+
+        <form action="/add_fuel" method="POST">
+
+            <div class="row">
+
+                <div class="col-md-4">
+
+                    <label>Vehicle</label>
+
+                    <select class="form-select" name="vehicle_id">
+
+                        {% for vehicle in vehicles %}
+
+                        <option value="{{ vehicle.id }}">
+
+                            {{ vehicle.registration }} - {{ vehicle.name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <label>Fuel (Litres)</label>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        class="form-control"
+                        name="liters"
+                        required>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <label>Cost (₹)</label>
+
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="cost"
+                        required>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <button class="btn btn-success">
+
+                Save Fuel Log
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-header bg-dark text-white">
+
+        Fuel History
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Vehicle</th>
+
+                    <th>Litres</th>
+
+                    <th>Cost</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for log in logs %}
+
+                <tr>
+
+                    <td>{{ log.id }}</td>
+
+                    <td>{{ log.vehicle.registration }}</td>
+
+                    <td>{{ log.liters }}</td>
+
+                    <td>₹ {{ log.cost }}</td>
+
+                    <td>{{ log.date }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

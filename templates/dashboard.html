@@ -1,22 +1,126 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
 
-<h2>Dashboard</h2>
+<h2 class="mb-4">Dashboard</h2>
 
 <div class="row">
 
-<div class="col-md-4">
+    <!-- Active Vehicles -->
+    <div class="col-md-3 mb-4">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <h5>🚚 Vehicles</h5>
+                <h2>{{ active_vehicles }}</h2>
+            </div>
+        </div>
+    </div>
 
-<div class="card p-3">
+    <!-- Drivers -->
+    <div class="col-md-3 mb-4">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <h5>👨‍✈️ Drivers</h5>
+                <h2>{{ active_drivers }}</h2>
+            </div>
+        </div>
+    </div>
 
-<h4>Total Vehicles</h4>
+    <!-- Trips -->
+    <div class="col-md-3 mb-4">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <h5>🛣 Trips</h5>
+                <h2>{{ trips }}</h2>
+            </div>
+        </div>
+    </div>
 
-<h1>{{ vehicles|length }}</h1>
+    <!-- Maintenance -->
+    <div class="col-md-3 mb-4">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <h5>🔧 Maintenance</h5>
+                <h2>{{ maintenance }}</h2>
+            </div>
+        </div>
+    </div>
 
 </div>
 
-</div>
+<hr>
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-primary text-white">
+                Fleet Overview
+            </div>
+
+            <div class="card-body">
+
+                <p>
+                    Manage Vehicles, Drivers, Trips,
+                    Maintenance, Fuel Logs and Reports
+                    from one place.
+                </p>
+
+                <a href="/vehicles" class="btn btn-success">
+                    Manage Vehicles
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-success text-white">
+                Quick Actions
+            </div>
+
+            <div class="card-body">
+
+                <div class="d-grid gap-2">
+
+                    <a href="/vehicles" class="btn btn-outline-primary">
+                        Vehicle Registry
+                    </a>
+
+                    <a href="/drivers" class="btn btn-outline-success">
+                        Driver Management
+                    </a>
+
+                    <a href="/trips" class="btn btn-outline-warning">
+                        Trip Management
+                    </a>
+
+                    <a href="/maintenance" class="btn btn-outline-danger">
+                        Maintenance
+                    </a>
+
+                    <a href="/fuel" class="btn btn-outline-secondary">
+                        Fuel Logs
+                    </a>
+
+                    <a href="/reports" class="btn btn-dark">
+                        Reports
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
