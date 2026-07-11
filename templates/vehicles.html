@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Vehicle Registry</h2>
+
+<form action="/add_vehicle" method="POST">
+
+<input class="form-control mb-2" name="registration" placeholder="Registration Number" required>
+
+<input class="form-control mb-2" name="name" placeholder="Vehicle Name" required>
+
+<input class="form-control mb-2" name="vehicle_type" placeholder="Vehicle Type" required>
+
+<input class="form-control mb-2" name="capacity" type="number" placeholder="Capacity" required>
+
+<input class="form-control mb-2" name="odometer" type="number" placeholder="Odometer">
+
+<input class="form-control mb-2" name="cost" type="number" placeholder="Acquisition Cost">
+
+<select class="form-control mb-3" name="status">
+
+<option>Available</option>
+
+<option>On Trip</option>
+
+<option>In Shop</option>
+
+<option>Retired</option>
+
+</select>
+
+<button class="btn btn-success">
+
+Add Vehicle
+
+</button>
+
+</form>
+
+<hr>
+
+<table class="table table-striped">
+
+<tr>
+
+<th>Registration</th>
+
+<th>Name</th>
+
+<th>Type</th>
+
+<th>Status</th>
+
+</tr>
+
+{% for vehicle in vehicles %}
+
+<tr>
+
+<td>{{ vehicle.registration }}</td>
+
+<td>{{ vehicle.name }}</td>
+
+<td>{{ vehicle.vehicle_type }}</td>
+
+<td>{{ vehicle.status }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}
