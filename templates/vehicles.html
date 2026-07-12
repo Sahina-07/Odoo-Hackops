@@ -17,59 +17,236 @@
 <input class="form-control mb-2" name="odometer" type="number" placeholder="Odometer">
 
 <input class="form-control mb-2" name="cost" type="number" placeholder="Acquisition Cost">
+{% extends "base.html" %}
 
-<select class="form-control mb-3" name="status">
+{% block content %}
 
-<option>Available</option>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<option>On Trip</option>
+    <h2>Vehicle Registry</h2>
 
-<option>In Shop</option>
+</div>
 
-<option>Retired</option>
+<div class="card shadow mb-4">
 
-</select>
+    <div class="card-header bg-primary text-white">
 
-<button class="btn btn-success">
+        Add New Vehicle
 
-Add Vehicle
+    </div>
 
-</button>
+    <div class="card-body">
 
-</form>
+        <form action="/add_vehicle" method="POST">
 
-<hr>
+            <div class="row">
 
-<table class="table table-striped">
+                <div class="col-md-4 mb-3">
 
-<tr>
+                    <label>Registration Number</label>
 
-<th>Registration</th>
+                    <input
+                        type="text"
+                        name="registration"
+                        class="form-control"
+                        required>
 
-<th>Name</th>
+                </div>
 
-<th>Type</th>
+                <div class="col-md-4 mb-3">
 
-<th>Status</th>
+                    <label>Vehicle Name</label>
 
-</tr>
+                    <input
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        required>
 
-{% for vehicle in vehicles %}
+                </div>
 
-<tr>
+                <div class="col-md-4 mb-3">
 
-<td>{{ vehicle.registration }}</td>
+                    <label>Vehicle Type</label>
 
-<td>{{ vehicle.name }}</td>
+                    <select
+                        name="vehicle_type"
+                        class="form-select">
 
-<td>{{ vehicle.vehicle_type }}</td>
+                        <option>Truck</option>
+                        <option>Van</option>
+                        <option>Mini Truck</option>
+                        <option>Pickup</option>
 
-<td>{{ vehicle.status }}</td>
+                    </select>
 
-</tr>
+                </div>
 
-{% endfor %}
+            </div>
 
-</table>
+            <div class="row">
+
+                <div class="col-md-3 mb-3">
+
+                    <label>Maximum Load (kg)</label>
+
+                    <input
+                        type="number"
+                        name="capacity"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <label>Odometer</label>
+
+                    <input
+                        type="number"
+                        name="odometer"
+                        class="form-control">
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <label>Acquisition Cost</label>
+
+                    <input
+                        type="number"
+                        name="acquisition_cost"
+                        class="form-control">
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <label>Status</label>
+
+                    <select
+                        name="status"
+                        class="form-select">
+
+                        <option>Available</option>
+                        <option>On Trip</option>
+                        <option>In Shop</option>
+                        <option>Retired</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <button class="btn btn-success">
+
+                Add Vehicle
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-header bg-dark text-white">
+
+        Registered Vehicles
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-light">
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Registration</th>
+
+                    <th>Name</th>
+
+                    <th>Type</th>
+
+                    <th>Capacity</th>
+
+                    <th>Odometer</th>
+
+                    <th>Cost</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for vehicle in vehicles %}
+
+                <tr>
+
+                    <td>{{ vehicle.id }}</td>
+
+                    <td>{{ vehicle.registration }}</td>
+
+                    <td>{{ vehicle.name }}</td>
+
+                    <td>{{ vehicle.vehicle_type }}</td>
+
+                    <td>{{ vehicle.capacity }}</td>
+
+                    <td>{{ vehicle.odometer }}</td>
+
+                    <td>{{ vehicle.acquisition_cost }}</td>
+
+                    <td>
+
+                        {% if vehicle.status=="Available" %}
+
+                            <span class="badge bg-success">
+                                {{ vehicle.status }}
+                            </span>
+
+                        {% elif vehicle.status=="On Trip" %}
+
+                            <span class="badge bg-warning">
+                                {{ vehicle.status }}
+                            </span>
+
+                        {% elif vehicle.status=="In Shop" %}
+
+                            <span class="badge bg-danger">
+                                {{ vehicle.status }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+                                {{ vehicle.status }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 
 {% endblock %}

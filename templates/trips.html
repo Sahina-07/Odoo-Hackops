@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Trip Management</h2>
+
+<div class="card shadow mb-4">
+
+    <div class="card-header bg-warning">
+
+        <h5>Create New Trip</h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <form action="/add_trip" method="POST">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label>Source</label>
+
+                    <input
+                        type="text"
+                        name="source"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label>Destination</label>
+
+                    <input
+                        type="text"
+                        name="destination"
+                        class="form-control"
+                        required>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label>Select Vehicle</label>
+
+                    <select
+                        name="vehicle_id"
+                        class="form-select"
+                        required>
+
+                        {% for vehicle in vehicles %}
+
+                        <option value="{{ vehicle.id }}">
+
+                            {{ vehicle.registration }}
+                            -
+                            {{ vehicle.name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label>Select Driver</label>
+
+                    <select
+                        name="driver_id"
+                        class="form-select"
+                        required>
+
+                        {% for driver in drivers %}
+
+                        <option value="{{ driver.id }}">
+
+                            {{ driver.name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label>Cargo Weight (kg)</label>
+
+                    <input
+                        type="number"
+                        name="cargo_weight"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <label>Planned Distance (km)</label>
+
+                    <input
+                        type="number"
+                        name="planned_distance"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <label>Revenue</label>
+
+                    <input
+                        type="number"
+                        name="revenue"
+                        class="form-control">
+
+                </div>
+
+            </div>
+
+            <button class="btn btn-warning">
+
+                Create Trip
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-header bg-dark text-white">
+
+        Trip List
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Source</th>
+
+                    <th>Destination</th>
+
+                    <th>Vehicle</th>
+
+                    <th>Driver</th>
+
+                    <th>Cargo</th>
+
+                    <th>Distance</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for trip in trips %}
+
+                <tr>
+
+                    <td>{{ trip.id }}</td>
+
+                    <td>{{ trip.source }}</td>
+
+                    <td>{{ trip.destination }}</td>
+
+                    <td>{{ trip.vehicle.registration }}</td>
+
+                    <td>{{ trip.driver.name }}</td>
+
+                    <td>{{ trip.cargo_weight }} kg</td>
+
+                    <td>{{ trip.planned_distance }} km</td>
+
+                    <td>
+
+                        <span class="badge bg-primary">
+
+                            {{ trip.status }}
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

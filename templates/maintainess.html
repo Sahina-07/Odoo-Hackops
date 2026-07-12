@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Vehicle Maintenance</h2>
+
+<div class="card shadow mb-4">
+
+    <div class="card-header bg-danger text-white">
+
+        Schedule Maintenance
+
+    </div>
+
+    <div class="card-body">
+
+        <form action="/add_maintenance" method="POST">
+
+            <div class="row">
+
+                <div class="col-md-4">
+
+                    <label>Select Vehicle</label>
+
+                    <select class="form-select" name="vehicle_id">
+
+                        {% for vehicle in vehicles %}
+
+                        <option value="{{ vehicle.id }}">
+
+                            {{ vehicle.registration }} - {{ vehicle.name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-5">
+
+                    <label>Description</label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="description"
+                        placeholder="Engine Repair">
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label>Estimated Cost</label>
+
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="cost">
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <button class="btn btn-danger">
+
+                Schedule Maintenance
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-header bg-dark text-white">
+
+        Maintenance History
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Vehicle</th>
+
+                    <th>Description</th>
+
+                    <th>Cost</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for item in maintenance %}
+
+            <tr>
+
+                <td>{{ item.id }}</td>
+
+                <td>{{ item.vehicle.registration }}</td>
+
+                <td>{{ item.description }}</td>
+
+                <td>₹ {{ item.cost }}</td>
+
+                <td>
+
+                    {% if item.status=="Open" %}
+
+                    <span class="badge bg-danger">
+
+                        Open
+
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge bg-success">
+
+                        Completed
+
+                    </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
