@@ -1,63 +1,159 @@
-from flask import Flask, render_template, request, redirect, flash
-from models import db, Vehicle
+from flask_sqlalchemy import SQLAlchemy
+from datetime import date
 
-app = Flask(__name__)
-
-app.config["SECRET_KEY"] = "TransitOps123"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-db.init_app(app)
-
-with app.app_context():
-    db.create_all()
+db = SQLAlchemy()
 
 
-@app.route("/")
-def home():
-    return redirect("/dashboard")
+# ---------------- USERS ---------------- #
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    role = db.Column(db.String(50), nullable=False)
 
 
-@app.route("/dashboard")
-def dashboard():
-    vehicles = Vehicle.query.all()
-    return render_template("dashboard.html", vehicles=vehicles)
+# ---------------- VEHICLES ---------------- #
 
+class Vehicle(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
 
-@app.route("/vehicles")
-def vehicles():
-    vehicles = Vehicle.query.all()
-    return render_template("vehicles.html", vehicles=vehicles)
+    registration = db.Column(db.String(50), unique=True, nullable=False)
 
+    name = db.Column(db.String(100), nullable=False)
 
-@app.route("/add_vehicle", methods=["POST"])
-def add_vehicle():
+    vehicle_type = db.Column(db.String(50), nullable=False)
 
-    reg = request.form["registration"]
+    capacity = db.Column(db.Float, nullable=False)
 
-    existing = Vehicle.query.filter_by(registration=reg).first()
+    odometer = db.Column(db.Float, default=0)
 
-    if existing:
-        flash("Registration already exists!")
-        return redirect("/vehicles")
+    acquisition_cost = db.Column(db.Float, default=0)
 
-    vehicle = Vehicle(
-        registration=reg,
-        name=request.form["name"],
-        vehicle_type=request.form["vehicle_type"],
-        capacity=request.form["capacity"],
-        odometer=request.form["odometer"],
-        acquisition_cost=request.form["cost"],
-        status=request.form["status"]
+    status = db.Column(
+        db.String(20),
+        default="Available"
     )
 
-    db.session.add(vehicle)
-    db.session.commit()
 
-    flash("Vehicle Added Successfully")
+# ---------------- DRIVERS ---------------- #
 
-    return redirect("/vehicles")
+class Driver(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    name = db.Column(db.String(100), nullable=False)
+
+    license_number = db.Column(
+        db.String(50),
+        unique=True,
+        nullable=False
+    )
+
+    license_category = db.Column(db.String(20))
+
+    license_expiry = db.Column(db.Date)
+
+    contact = db.Column(db.String(20))
+
+    safety_score = db.Column(db.Integer, default=100)
+
+    status = db.Column(
+        db.String(20),
+        default="Available"
+    )
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# ---------------- TRIPS ---------------- #
+
+class Trip(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    source = db.Column(db.String(100))
+
+    destination = db.Column(db.String(100))
+
+    cargo_weight = db.Column(db.Float)
+
+    planned_distance = db.Column(db.Float)
+
+    revenue = db.Column(db.Float, default=0)
+
+    status = db.Column(
+        db.String(20),
+        default="Draft"
+    )
+
+    vehicle_id = db.Column(
+        db.Integer,
+        db.ForeignKey("vehicle.id")
+    )
+
+    driver_id = db.Column(
+        db.Integer,
+        db.ForeignKey("driver.id")
+    )
+
+    vehicle = db.relationship("Vehicle")
+
+    driver = db.relationship("Driver")
+
+
+# ---------------- MAINTENANCE ---------------- #
+
+class Maintenance(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    vehicle_id = db.Column(
+        db.Integer,
+        db.ForeignKey("vehicle.id")
+    )
+
+    description = db.Column(db.String(200))
+
+    cost = db.Column(db.Float)
+
+    status = db.Column(
+        db.String(20),
+        default="Open"
+    )
+
+    vehicle = db.relationship("Vehicle")
+
+
+# ---------------- FUEL LOG ---------------- #
+
+class FuelLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    vehicle_id = db.Column(
+        db.Integer,
+        db.ForeignKey("vehicle.id")
+    )
+
+    liters = db.Column(db.Float)
+
+    cost = db.Column(db.Float)
+
+    date = db.Column(db.Date, default=date.today)
+
+    vehicle = db.relationship("Vehicle")
+
+
+# ---------------- EXPENSES ---------------- #
+
+class Expense(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    vehicle_id = db.Column(
+        db.Integer,
+        db.ForeignKey("vehicle.id")
+    )
+
+    expense_type = db.Column(db.String(50))
+
+    amount = db.Column(db.Float)
+
+    date = db.Column(db.Date, default=date.today)
+
+    vehicle = db.relationship("Vehicle")
